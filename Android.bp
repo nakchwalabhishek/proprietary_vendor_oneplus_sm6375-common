@@ -16854,3 +16854,24 @@ install_symlink {
     installed_location: "lib64/libq3dtools_adreno.so",
     symlink_target: "/vendor/lib64/egl/libq3dtools_adreno.so",
 }
+
+// StatiXOS: provide the legacy VNDK-34 soname that several blobs list in DT_NEEDED.
+// VNDK is removed in Android 15+, so libtinyxml2-v34 has no upstream module;
+// alias it to the shipped tinyxml2 prebuilt under the versioned stem.
+cc_prebuilt_library_shared {
+    name: "libtinyxml2-v34",
+    owner: "oneplus",
+    strip: { none: true },
+    stem: "libtinyxml2-v34",
+    target: {
+        android_arm64: {
+            srcs: ["proprietary/vendor/lib64/libtinyxml2_1.so"],
+        },
+        android_arm: {
+            srcs: ["proprietary/vendor/lib/libtinyxml2_1.so"],
+        },
+    },
+    compile_multilib: "both",
+    vendor: true,
+    soc_specific: true,
+}
